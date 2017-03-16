@@ -35,6 +35,9 @@ class FuturosFunTest extends FunSuite{
 
     val prueba = Future.sequence(lista)
 
+    /**
+     * Se filtran los futuros fallidos para evitar el procesamiento de los futuros exitosos.
+     */
     val futureListOfFailures = prueba.map {
 
       x => x.filter {
@@ -47,7 +50,10 @@ class FuturosFunTest extends FunSuite{
       case Success (r) =>
         r.map{
           y => y match {
-            case zFailure(error) => println(error)
+            case zFailure(error) =>
+              // llamado a proceso que hace los reintentos
+              // TODO: validar llamado a un nuevo actor, al mismo  o validar recovery.
+              println(error)
           }
         }
 
